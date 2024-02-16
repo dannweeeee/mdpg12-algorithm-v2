@@ -33,12 +33,12 @@ def path_finding():
     for ob in obstacles:
         maze_solver.add_obstacle(ob['x'], ob['y'], ob['d'], ob['id'])
 
-    print("Manual A*")
+    print("MazeSolver using A* Search")
     start = time.time()
     optimal_path, distance = maze_solver.get_optimal_order_dp()
-    print(time.time() - start)
-    print(distance)
-
+    print(f"Time taken to find shortest path using MazeSolver: {time.time() - start}s")
+    print(f"Distance to travel: {distance} units")
+    
     commands = command_generator(optimal_path, big_turn)
     path_results = [optimal_path[0].get_dict()]
     i = 0
@@ -77,10 +77,10 @@ def fastest_car():
 
     solver = FastCarSolver(size_x, size_y, robot_x, robot_y, goal_x, goal_y)
 
-    print("Manual A*")
+    print("FastestCarSolver using A* Search")
     start = time.time()
     optimal_path = solver.get_path()
-    print(time.time() - start)
+    print(f"Time taken to find shortest path using FastestCarSolver: {time.time() - start}s")
 
     path_results = []
     for o in optimal_path:

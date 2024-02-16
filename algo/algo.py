@@ -9,6 +9,7 @@ from python_tsp.exact import solve_tsp_dynamic_programming
 turn_wrt_big_turns = [[3 * TURN_RADIUS, TURN_RADIUS],
                   [4 * TURN_RADIUS, 2 * TURN_RADIUS]]
 
+#################### MAZE SOLVER ####################
 
 class MazeSolver:
     def __init__(
@@ -77,14 +78,13 @@ class MazeSolver:
             # calculate optimal_cost table
             items = [self.robot.get_start_state()]
             cur_view_positions = []
-            print(op)
-            print("List of obstacle visited: \n")
+            print("List of obstacles:")
 
             for idx in range(len(all_view_positions)):
                 if op[idx] == '1':
                     items = items + all_view_positions[idx]
                     cur_view_positions.append(all_view_positions[idx])
-                    print("obstacle: {}\n".format(self.grid.obstacles[idx]))
+                    print("obstacle: {}".format(self.grid.obstacles[idx]))
 
             self.path_cost_generator(items)
 
@@ -120,6 +120,9 @@ class MazeSolver:
                 optimal_path = [items[0]]
                 distance = _distance + fixed_cost
 
+                print(f"path = {items}")
+                print(f"distance = {distance}")
+
                 for i in range(len(_permutation) - 1):
                     from_item = items[visited_candidates[_permutation[i]]]
                     to_item = items[visited_candidates[_permutation[i + 1]]]
@@ -133,6 +136,9 @@ class MazeSolver:
             if optimal_path:
                 # if found optimal path, return
                 break
+
+        print(f"most optimal path = {items}")
+        print(f"distance = {distance}")
 
         return optimal_path, distance
 
@@ -359,6 +365,8 @@ class MazeSolver:
                 astar_search(states[i], states[j])
 
 
+#################### FAST CAR SOLVER ####################
+                
 class FastCarSolver:
     def __init__(self, size_x: int, size_y: int, robot_x: int, robot_y: int, goal_x: int, goal_y: int):
         self.grid = GridFastestCar(size_x, size_y, robot_x, robot_y, goal_x, goal_y)
