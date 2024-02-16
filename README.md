@@ -1,6 +1,14 @@
-# Algo
+# Multidisciplinary Project - Algorithm API
 
-## Server
+## Overview
+
+This repository contains the code for the algorithm component of the CZ3004/SC2079 Multidisciplinary Project. It was built in Python. The repository is responsible for the following:
+
+- Finding the shortest path from starting point to all the obstacles
+- Performing inference on the images captured by the robot to identify the symbols
+- Stitching the images together to form a summary of the results
+
+## Setup
 
 ### Installing dependencies 
 ```bash
