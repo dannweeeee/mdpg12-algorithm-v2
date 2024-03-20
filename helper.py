@@ -11,7 +11,7 @@ def command_generator(states, big_turn):
     for i in range(1, len(states)):
         steps = "00"
         if big_turn:
-            steps = "10"
+            steps = "30"
 
         if states[i].direction == states[i - 1].direction:
             if (states[i].x > states[i - 1].x and states[i].direction == Direction.EAST) or (
