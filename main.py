@@ -1,7 +1,7 @@
 import time
 
 from consts import Direction
-from algo.algo import MazeSolver, FastCarSolver, SlowestCarSolver
+from algo.algo import MazeSolver, SlowestCarSolver
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from model import *
@@ -20,51 +20,51 @@ def status():
 
 #################### SLOWEST CAR SOLVER USING BREADTH FIRST SEARCH ####################
 
-# @app.route('/path', methods=['POST'])
-# def path_finding():
-#     content = request.json
+@app.route('/slowest', methods=['POST'])
+def path_finding_slowest():
+    content = request.json
 
-#     print("content: {}".format(content))
-#     obstacles = content['obstacles']
+    print("content: {}".format(content))
+    obstacles = content['obstacles']
     
-#     # Check if 'big_turn' key exists, otherwise set it to a default value
-#     big_turn = content.get('big_turn', 0)
+    # Check if 'big_turn' key exists, otherwise set it to a default value
+    big_turn = content.get('big_turn', 0)
 
-#     slowest_car_solver = SlowestCarSolver(20, 20, 1, 1, Direction.NORTH, big_turn=big_turn)
+    slowest_car_solver = SlowestCarSolver(20, 20, 1, 1, Direction.NORTH, big_turn=big_turn)
 
-#     for ob in obstacles:
-#         slowest_car_solver.add_obstacle(ob['x'], ob['y'], ob['d'], ob['id'])
+    for ob in obstacles:
+        slowest_car_solver.add_obstacle(ob['x'], ob['y'], ob['d'], ob['id'])
 
-#     print("SlowestCarSolver using BFS")
-#     start = time.time()
-#     optimal_path, distance = slowest_car_solver.get_optimal_order_dp()
-#     print(f"Time taken to find shortest path using SlowestCarSolver: {time.time() - start}s")
-#     print(f"Distance to travel: {distance} units")
+    print("SlowestCarSolver using BFS")
+    start = time.time()
+    optimal_path, distance = slowest_car_solver.get_optimal_order_dp()
+    print(f"Time taken to find shortest path using SlowestCarSolver: {time.time() - start}s")
+    print(f"Distance to travel: {distance} units")
     
-#     commands = command_generator(optimal_path, big_turn)
-#     path_results = [optimal_path[0].get_dict()]
-#     i = 0
-#     for command in commands:
-#         if command.startswith("SNAP"):
-#             continue
-#         if command.startswith("FIN"):
-#             continue
-#         elif command.startswith("FW") or command.startswith("FS"):
-#             i += int(command[2:]) // 10
-#         elif command.startswith("BW") or command.startswith("BS"):
-#             i += int(command[2:]) // 10
-#         else:
-#             i += 1
-#         path_results.append(optimal_path[i].get_dict())
+    commands = command_generator(optimal_path, big_turn)
+    path_results = [optimal_path[0].get_dict()]
+    i = 0
+    for command in commands:
+        if command.startswith("SNAP"):
+            continue
+        if command.startswith("FIN"):
+            continue
+        elif command.startswith("FW") or command.startswith("FS"):
+            i += int(command[2:]) // 10
+        elif command.startswith("BW") or command.startswith("BS"):
+            i += int(command[2:]) // 10
+        else:
+            i += 1
+        path_results.append(optimal_path[i].get_dict())
 
-#     return jsonify({
-#         "data": {
-#             'distance': distance,
-#             'path': path_results,
-#             'commands': commands
-#         },
-#         "error": None
-#     })
+    return jsonify({
+        "data": {
+            'distance': distance,
+            'path': path_results,
+            'commands': commands
+        },
+        "error": None
+    })
 
 #################### MAZE SOLVER USING A* SEARCH ####################
 
@@ -110,38 +110,6 @@ def path_finding():
             'distance': distance,
             'path': path_results,
             'commands': commands
-        },
-        "error": None
-    })
-
-#################### FASTEST CAR SOLVER USING A* SEARCH ####################
-
-@app.route('/fastest_car', methods=['POST'])
-def fastest_car():
-    content = request.json
-
-    size_x = content['size_x']
-    size_y = content['size_y']
-    robot_x = content['robot_x']
-    robot_y = content['robot_y']
-    goal_x = content['goal_x']
-    goal_y = content['goal_y']
-
-    solver = FastCarSolver(size_x, size_y, robot_x, robot_y, goal_x, goal_y)
-
-    print("FastestCarSolver using A* Search")
-    start = time.time()
-    optimal_path = solver.get_path()
-    print(f"Time taken to find shortest path using FastestCarSolver: {time.time() - start}s")
-
-    path_results = []
-    for o in optimal_path:
-        path_results.append(o.get_dict())
-
-    return jsonify({
-        "data": {
-            'path': path_results,
-            'commands': command_generator(optimal_path)
         },
         "error": None
     })
